@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<script>
+	"use strict";
+
+	class Product {
+
+		constructor(name, price, quantity, description) {
+			this.name = name;
+			this.price = price;
+			this.quantity = quantity;
+			this.description = description;
+		}
+
+	}
+
+	export function productFilter(str, arr) {
+		let array = str.split("&");
+		let copy = [...arr];
+
+		for (let item of array) {
+			let splittedItem = item.split("-");
+			let propertyFilter;
+			let actionFilter;
+			let valueFilter;
+			let filteredProductList = [];
+
+			switch (item.slice(0, 3)) {
+				case "nam":
+
+				case "des":
+					propertyFilter = splittedItem[0];
+					actionFilter = splittedItem[1];
+					valueFilter = splittedItem[2];
+
+					break;
+
+				case "qua":
+
+				case "pri":
+					propertyFilter = splittedItem[0];
+					if (splittedItem[1].slice(0, 2) == ">=" || splittedItem[1].slice(0, 2) == "<=") {
+						actionFilter = splittedItem[1].slice(0, 2);
+						valueFilter = +splittedItem[1].slice(2);
+					} else {
+						actionFilter = splittedItem[1].slice(0, 1);
+						valueFilter = +splittedItem[1].slice(1);
+					}
+					break;
+			}
+			//alert(propertyFilter + " " + actionFilter + " " + valueFilter);
+
+			for (let product of copy) {
+
+				switch (actionFilter) {
+					case "contains":
+						if (product[propertyFilter].includes(valueFilter) == true) filteredProductList.push(product);
+						break;
+
+					case "starts":
+						if (product[propertyFilter].startsWith(valueFilter) == true) filteredProductList.push(product);
+						break;
+
+					case "ends":
+						if (product[propertyFilter].endsWith(valueFilter) == true) filteredProductList.push(product);
+						break;
+
+					case ">":
+						if (product[propertyFilter] > valueFilter) filteredProductList.push(product);
+						break;
+
+					case "<":
+						if (product[propertyFilter] < valueFilter) filteredProductList.push(product);
+						break;
+
+					case ">=":
+						if (product[propertyFilter] >= valueFilter) filteredProductList.push(product);
+						break;
+
+					case "<=":
+						if (product[propertyFilter] <= valueFilter) filteredProductList.push(product);
+						break;
+
+					case "=":
+						if (product[propertyFilter] == valueFilter) filteredProductList.push(product);
+						break;
+				}
+				//alert(propertyFilter + " " + actionFilter + " " + valueFilter);
+			}
+
+			copy = filteredProductList;
+			//alert(arr);
+
+		}
+
+		return copy;
+	}
+
+	let str = "name-contains-ик&price->=50&quantity->5&description-ends-ом";
+	let str2 = "name-contains-н&price-=50&quantity->5&description-starts-Шо";
+
+	let productsArray = [];
+	productsArray.push(new Product("Сникерс", 50, 10, "Шоколадный батончик с арахисом"));
+	productsArray.push(new Product("Сникерс макс", 80, 13, "Шоколадный батончик с арахисом"));
+	productsArray.push(new Product("Марс", 55, 12, "Шоколадный батончик с арахисом"));
+	productsArray.push(new Product("Твикс", 60, 9, "Вафельный батончик"));
+	productsArray.push(new Product("Баунти", 50, 14, "Шоколадный батончик с кокосом"));
+
+	alert(productFilter(str, productsArray));
+	alert(productFilter(str2, productsArray));
+</script>

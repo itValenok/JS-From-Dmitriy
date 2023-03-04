@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<script>
+	"use strict";
+
+	export function lowerStr(str) {
+		if (!str) return str;
+
+		let lowerS = str.toLowerCase();
+		return lowerS[0].toUpperCase() + lowerS.slice(1);
+	}
+
+	export function spaceGood(str) {
+		let spaceG = "";
+
+		for (let i = 0; i < str.length; i++) {
+			if (str[i] == " ") {
+				if ((str[i + 1] == "," || str[i + 1] == "." || str[i + 1] == " ") && (i != str.length - 1)) {
+					continue;
+				}
+			} else if ((str[i] == "," || str[i] == ".") && (i != str.length - 1)) {
+				if (str[i + 1] != " ") {
+					spaceG += str[i];
+					spaceG += " ";
+					continue;
+
+				}
+			}
+			spaceG += str[i];
+		}
+		return spaceG;
+
+	}
+
+	export function wordsCount(str) {
+		let arr = spaceGood(str).split(" ");
+		return arr.length;
+	}
+
+	export function uniqWordsCount(str) {
+		let word = {};
+		let string = "";
+		for (let i = 0; i < str.length; i++) {
+			if (str[i] == "," || str[i] == ".")
+				continue;
+			else string += str[i];
+		}
+		let arr = string.toLowerCase().split(" ");
+
+		for (let i = 0; i < arr.length; i++) {
+			if (arr[i] in word) {
+				word[arr[i]] += 1;
+			}
+			else {
+				word[arr[i]] = 1;
+			}
+		}
+		for (let key in word) {
+			alert(`Слово "${key}" встречается ${word[key]} раз`);
+		}
+	}
+
+	/*let str = "Вот пример строки,в которой     используются знаки препинания.После знаков должны стоять пробелы , а перед знаками их быть не должно .    Если есть лишние подряд идущие пробелы, они должны быть устранены.";*/
+
+	let str = "Текст, в котором слово текст несколько раз встречается и слово тоже";
+
+	uniqWordsCount(str);
+
+</script>
